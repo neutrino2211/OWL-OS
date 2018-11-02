@@ -1,0 +1,6 @@
+electron
+*.so
+mem_spy
+mem_spy.cc
+runtime
+node_modules

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ureno</title>
+</head>
+<body>
+    <h1 id="title">Hello World</h1>
+    <p id="cpu-usage"></p>
+    <script>
+        console.log("Requiring Mem")
+        var mem = require("./modules/init/native/build/Release/mem_ctl");
+        var t = document.getElementById("title");
+        console.log("Mem required successfully")
+        console.log("Storing value of Hello")
+        let h = mem.Hello()
+        console.log("Hello value stored")
+        var U = new mem.Bus();
+        // var syscall = U.use
+        async function init() {
+            console.log("Creating threads")
+            console.log("---------------------------------------")
+            mem.new_thread();
+            try {
+            } catch (e) {
+                console.log(e)
+            }
+            console.log("Threads created")
+        }
+    
+        // async function r(){
+        //     mem.new_thread();
+        //     return
+        // }
+    
+        // async function simult(){
+        //     console.log("---------------------------------------")
+        //         bus.read(bus.getModuleId("test"),function(id,ptr,isptr){
+        //             console.log("ID : "+id);
+        //             console.log("PTR : "+ptr);
+        //             console.log("ISPTR : "+isptr);
+        //         })
+        //         return;
+        // }
+        init()
+        // simult();
+    </script>
+</body>
+</html>
