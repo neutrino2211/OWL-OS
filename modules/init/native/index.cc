@@ -9,15 +9,8 @@
 #include <thread>
 #include "library.h"
 #include "vbus.h"
-// #include "UrenoNAPI.h"
 #include "./vbus_iface.h"
 #include "./vbus_iface_worker.h"
-// #include "uv.h"
-// #include <dlfcn.h>
-// #include <iostream>
-// #include <stdio.h>
-// #include <strings.h>
-// #include <dlfcn.h>
 #include <vector>
 #include <signal.h>
 #include <unistd.h>
@@ -42,7 +35,7 @@ namespace init {
         vector<string> mods;
     };
 
-    vector<string> mods = {"uid","cpu_usage"};
+    vector<string> mods = {"cpu_usage"};
     VBUS bus = VBUS(mods);
     //JS Interface helper functions
 

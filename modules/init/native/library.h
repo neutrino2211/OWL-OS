@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <strings.h>
 #include "vbus.h"
+#include <unistd.h>
 
 
 
@@ -32,7 +33,10 @@ struct Module {
 };
 
 void lib_open(string name,VBUS& vbus,int id){
-    string path = "/root/Desktop/Ureno/modules/init/firmware/"+name+"/build/"+name+".so";
+    char _path[256];
+    getcwd(_path,sizeof(_path));
+    cout << _path << endl;
+    string path = string(_path)+"/modules/init/firmware/"+name+"/build/"+name+".so";
     void* handle = dlopen(path.c_str(),RTLD_NOW);
     if(!handle){
         printf("Error : %s\n",dlerror());
@@ -58,21 +62,7 @@ void lib_open(string name,VBUS& vbus,int id){
 }
 
 void module_load(string name, ControlData& cdata){
-    // I* i = args.GetIsolate();
-    //     if(!args[0]->IsString()||!args[1]->IsString()){
-    //         args.GetReturnValue().Set(Undefined(i));
-    //         return;
-    //     }
-    //     String::Utf8Value s(args[0]);
-    //     string name(*s);
-    //     String::Utf8Value s2(args[1]);
-    //     string data(*s2);
-    //     ControlData cdata;
-    //     cdata.data = init::s2v(data);
     string sub = name.substr(0,name.find_last_of("/"));
-    // int len = sub.length();
-    // printf("%s:%i\n",sub.c_str(),len);
-    // printf("%i\n",name.find("?"));
     if(name.find("/") != -1){
         sub = name.substr(sub.length());
     }
