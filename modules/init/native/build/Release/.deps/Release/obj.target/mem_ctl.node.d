@@ -1,1 +1,0 @@
-cmd_Release/obj.target/mem_ctl.node := g++ -shared -pthread -rdynamic -m64  -Wl,-soname=mem_ctl.node -o Release/obj.target/mem_ctl.node -Wl,--start-group Release/obj.target/mem_ctl/index.o -Wl,--end-group 
