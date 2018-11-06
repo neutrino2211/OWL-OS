@@ -69,6 +69,10 @@ def run_tasks(tasks):
     for t in tasks:
         t._run()
 
-run_tasks([
-    CryptoTask("crypto",args)
-])
+def main():
+    run_tasks([
+        CryptoTask("crypto",args)
+    ])
+
+if __name__ == "__main__":
+    main()
