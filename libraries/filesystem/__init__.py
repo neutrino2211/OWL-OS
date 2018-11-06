@@ -8,6 +8,7 @@ class FSFile():
         p = store_path+p
         if not path.exists(path.dirname(p)):
             raise OWLPathError(p)
+        self.eof = False
         self.path = p
         self.line = 0
         self.mode = mode
@@ -18,12 +19,17 @@ class FSFile():
             self.content = self.file.read()
             self.lines = self.content.split(chr(0xa))
 
-    def read(self,size=-1):
-        return self.file.read() if size==-1 else self.file.read(size)
+    def read(self,size=None):
+        size = size or len(self.content)
+        return self.content[:size]
 
     def readline(self):
         if self.is_write :
             raise OWLFileModeError(self.mode,"readline")
+        if len(self.lines)-1 == self.line:
+            self.eof = True
+        elif len(self.lines) == self.line:
+            raise IndexError()
         l = self.lines[self.line]
         self.line += 1
         return l

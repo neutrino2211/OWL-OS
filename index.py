@@ -6,9 +6,16 @@ import sys
 from libraries.video_stream import get_frame,close_stream
 from libraries import Config
 from libraries import filesystem
+from libraries.crypto import OWLCrypto
 
 #OWL-OS C++ API
 import owlapi
+
+c = Config()
+key = c.get_val("config.crypto")
+c.lock()
+crypto = OWLCrypto(key)
+del key
 
 class JSInterface:
     def debug(self, param):
@@ -30,20 +37,15 @@ class JSInterface:
         webview.toggle_fullscreen()
 
 def await_sigint(sig, frame):
+    crypto.restore_key()
+    close_stream()
     webview.destroy_window()
+    
 
 def sandbox_observer_thread():
     print(".")
 
-c = Config()
-c.lock()
-key = c.get_val("config.crypto")
-f = filesystem.FSFile("file-write-test",mode="r")
-print(f.read())
-f.close()
-f = filesystem.FSFile("file-write-lines-test",mode="r")
-print(f.readlines())
-f.close()
+
 api = JSInterface()
 t = threading.Thread(target=sandbox_observer_thread)
 t.start()
