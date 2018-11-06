@@ -6,8 +6,8 @@ import sys
 from libraries import Config
 from libraries import filesystem
 from libraries.crypto import OWLCrypto
+from libraries import gecko_byte_code
 
-#OWL-OS C++ API
 import owlapi
 
 shutdown = False
@@ -17,6 +17,9 @@ class JSInterface:
     def debug(self, param):
         print(param)
         return
+
+    def gecko(self, param):
+        gecko_byte_code.loop(param,webview)
 
     def toggle_fullscreen(self,param):
         webview.toggle_fullscreen()
@@ -41,7 +44,7 @@ def init():
     crypto = OWLCrypto(key)
     c.lock()
     del key
-    owlapi.get_cpu_id()
+    print(owlapi.get_cpu_info())
     api = JSInterface()
     t = threading.Thread(target=sandbox_observer_thread)
     t.start()
