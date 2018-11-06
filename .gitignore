@@ -6,3 +6,6 @@ runtime
 node_modules
 *.node
 *.o
+__pycache__
+config/*
+storage/*
