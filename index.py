@@ -17,10 +17,12 @@ def main():
             main()
         else:
             import install
-            install.main()
-            init.init()
+            install.main(install.args)
+            main()
     except Exception:
         # Extremely fatal error
         print("ERROR")
 
 main()
+if not init.shutdown:
+    init.graceful_exit()

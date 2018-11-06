@@ -8,42 +8,18 @@
 </head>
 <body>
     <h1 id="title">Hello World</h1>
-    <button onclick="pywebview.api.close_video_stream()">stop</button>
-    <button onclick="pywebview.api.stream_video('stream')">start</button>
-    <button onclick="pywebview.api.toggle_fullscreen()">fullscreen</button>
-    <img src="" alt="Stream" id="img"></img>
-    <p id="fps"></p>
 </body>
 <script>
     var frames = 0;
     var img = document.getElementById("img");
     var fps = document.getElementById("fps");
     const OWL = {
-        log(m){
-            alert(m)
-        },
-        stream(data){
-            // alert(data)
-            frames += 1
-            data = data.slice(2,-1);
-            img.src = "data:image/jpeg;base64,"+data
-        },
         init(){
-            pywebview.api.stream_video("stream")
-            setInterval(function(){
-                fps.innerText = frames/60;
-            },1000);
         }
     };
     onerror = function(e){
         alert(e);
     }
-    // pywebview.api.debug("Ureno");
-    // function f(){
-        // alert(typeof pywebview)
-    // };
-    
-    // pywebview.api.debug
     var i = setInterval(function(){
         if(typeof pywebview == "object"){
             clearInterval(i);

@@ -8,7 +8,7 @@ class InstallTask():
         self.args = args
 
     def confirm_path(self,p):
-        if not path.exists(p):
+        if not path.exists(path.dirname(p)):
             makedirs(path.dirname(p))
 
     def get_arg(self,a):
@@ -69,10 +69,10 @@ def run_tasks(tasks):
     for t in tasks:
         t._run()
 
-def main():
+def main(args):
     run_tasks([
         CryptoTask("crypto",args)
     ])
 
 if __name__ == "__main__":
-    main()
+    main(args)
