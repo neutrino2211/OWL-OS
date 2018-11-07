@@ -40,11 +40,14 @@ def graceful_exit():
 
 def init():
     global crypto
-    key = c.get_val("config.crypto")
+    key = c.get_val("crypto")
     crypto = OWLCrypto(key)
     c.lock()
     del key
     print(owlapi.get_cpu_info())
+    inf = owlapi.get_sys_info()
+    c.set_val("cpu.clock_speed",inf["clock_speed"])
+    print(inf)
     api = JSInterface()
     t = threading.Thread(target=sandbox_observer_thread)
     t.start()

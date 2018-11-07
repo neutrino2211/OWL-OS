@@ -1,4 +1,5 @@
 from .errors import OWLObjectInstanceException
+from os import path
 
 init = True
 
@@ -8,13 +9,27 @@ class Config():
         if not init:
             raise OWLObjectInstanceException("Config should have only one instance")
         init = False
-        self._lock = False
+        self.__lock = False
     
     def lock(self):
-        self._lock = True
+        self.__lock = True
 
     def get_val(self,name):
-        if self._lock and name == "config.crypto":
+        w = ["config"]
+        w.extend(name.split("."))
+        p = "/".join(w)
+        if self.__lock and name == "crypto":
             return None
-        with open("/".join(name.split(".")),"rb") as f:
+        with open(p,"rb") as f:
             return f.read()
+    
+    def set_val(self,name,val):
+        if name == "crypto":
+            return None
+        w = ["config"]
+        w.extend(name.split("."))
+        p = "/".join(w)
+        if not path.exists(p):
+            path.os.makedirs(path.dirname(p))
+        with open(p,"w") as f:
+            f.write(str(val))

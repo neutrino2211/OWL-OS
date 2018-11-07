@@ -3,7 +3,7 @@ from ..errors import OWLPathError, OWLFileModeError
 
 store_path = "storage/"
 
-class FSFile():
+class FSFile:
     def __init__(self,p,mode="r"):
         p = store_path+p
         if not path.exists(path.dirname(p)):

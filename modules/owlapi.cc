@@ -1,20 +1,16 @@
 #include <Python.h>
+#include "./hw.h"
 
 static PyObject* hello_world(PyObject* self, PyObject* args){
     printf("Hello world\n");
     return Py_None;
 }
 
-static inline void native_cpuid(unsigned int *eax, unsigned int *ebx,
-                                unsigned int *ecx, unsigned int *edx)
-{
-        /* ecx is often an input as well as an output. */
-        asm volatile("cpuid"
-            : "=a" (*eax),
-              "=b" (*ebx),
-              "=c" (*ecx),
-              "=d" (*edx)
-            : "0" (*eax), "2" (*ecx));
+static PyObject* sys_info(PyObject* self, PyObject* args){
+    return Py_BuildValue("{s:l,s:l}",
+        "ram", total_ram(),
+        "clock_speed", cpu_clock_speed()
+    );
 }
 
 static PyObject* cpu_id(PyObject* self, PyObject* args){
@@ -60,6 +56,7 @@ static PyObject* cpu_id(PyObject* self, PyObject* args){
 static PyMethodDef OWL_API_Methods[] = {
     { "helloworld", hello_world, METH_NOARGS, "Prints Hello World" },
     {"get_cpu_info", cpu_id, METH_NOARGS, "Gets cpu information"},
+    {"get_sys_info", sys_info, METH_NOARGS, "Get system information / capabilities"},
     { NULL, NULL, 0, NULL }
 };
 
