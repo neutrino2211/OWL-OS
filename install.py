@@ -58,11 +58,11 @@ class CryptoTask(InstallTask):
         ks = self.get_arg("crypt-key-size") or 32
 
         self.log("Generating key")
-        s = ''.join(chr(random.randint(0,255)) for _ in range(64))
+        s = ''.join(chr(random.randint(0,255)) for _ in range(ks))
         for i in range(r):
-            s = sxor(s,''.join(chr(random.randint(0,255)) for _ in range(64)))
+            s = sxor(s,''.join(chr(random.randint(0,255)) for _ in range(ks)))
         with open("./config/crypto","wb") as f:
-            f.write(bytes(s,'utf-8')[:ks])
+            f.write(bytes(s,'utf-8'))
         self.log("key saved")
 
 def run_tasks(tasks):

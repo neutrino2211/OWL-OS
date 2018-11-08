@@ -1,10 +1,11 @@
 from os import path
+import gzip
 from ..errors import OWLPathError, OWLFileModeError
 
 store_path = "storage/"
 
 class FSFile:
-    def __init__(self,p,mode="r"):
+    def __init__(self,p,crypto,mode="r"):
         p = store_path+p
         if not path.exists(path.dirname(p)):
             raise OWLPathError(p)
@@ -13,15 +14,16 @@ class FSFile:
         self.line = 0
         self.mode = mode
         self.is_write = self.mode.find("r")==-1
-        self.file = open(p,mode)
+        self.file = open(p,mode+"b")
         self.content = ""
+        self.crypto = crypto
         if self.mode.find("r") != -1:
-            self.content = self.file.read()
-            self.lines = self.content.split(chr(0xa))
+            self.content = gzip.decompress(self.file.read()).decode("ISO-8859-5")
+        self.lines = crypto.decrypt(self.content).split(chr(0xa))
 
     def read(self,size=None):
         size = size or len(self.content)
-        return self.content[:size]
+        return self.crypto.decrypt(self.content[:size])
 
     def readline(self):
         if self.is_write :
@@ -30,24 +32,28 @@ class FSFile:
             self.eof = True
         elif len(self.lines) == self.line:
             raise IndexError()
-        l = self.lines[self.line]
+        l = self.crypto.decrypt(self.lines[self.line])
         self.line += 1
         return l
 
     def readlines(self):
         if self.is_write:
             raise OWLFileModeError(self.mode,"readlines")
-        return self.lines
+        l = []
+        for line in self.lines:
+            l.append(self.crypto.decrypt(line))
+        return l
 
     def write(self,content):
         if not self.is_write:
             raise OWLFileModeError(self.mode,"write")
-        self.content = content
+        enc = self.crypto.encrypt(content)
+        self.content = enc
 
     def writeline(self,line):
         if not self.is_write:
             raise OWLFileModeError(self.mode,"writeline")
-        self.content += line+"\n"
+        self.content += self.crypto.encrypt(line+"\n")
     
     def writelines(self,lines):
         for l in lines:
@@ -55,5 +61,5 @@ class FSFile:
 
     def close(self):
         if self.is_write :
-            self.file.write(self.content)
+            self.file.write(gzip.compress(bytes(self.content,"ISO-8859-5")))
         self.file.close()

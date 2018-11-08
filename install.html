@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Ureno</title>
+</head>
+<body>
+    <h1 id="title">Hello World</h1>
+</body>
+<script>
+    var frames = 0;
+    var img = document.getElementById("img");
+    var fps = document.getElementById("fps");
+    function alert_multiple(){
+        for(let i in arguments){
+            alert(arguments[i])
+        }
+    }
+    const OWL = {
+        init(){
+        }
+    };
+    onerror = function(e){
+        alert(e);
+    }
+    var i = setInterval(function(){
+        if(typeof pywebview == "object"){
+            clearInterval(i);
+            OWL.init()
+        } 
+    },100)
+</script>
+</html>

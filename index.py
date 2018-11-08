@@ -5,6 +5,7 @@ This might be caused by a device malfunction or the startup disk is corrupted.
 Two options are available to try and recover the system
     1: Restart
     2: Re-install (will wipe data)
+    3: shutdown
 > '''
 def main():
     try:
@@ -15,6 +16,8 @@ def main():
         v = input(prompt)
         if v=='1':
             main()
+        elif v=='3':
+            init.sys.exit(0)
         else:
             import install
             install.main(install.args)

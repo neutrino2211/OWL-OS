@@ -1,7 +1,7 @@
 from time import sleep
 from sys import exit
 
-class OWLException:
+class OWLException(Exception):
     '''
     OWLException:
         Base class for all OWL-OS exceptions
@@ -11,7 +11,7 @@ class OWLException:
         func = "onFatalError" if fatal else "onError"
         if webview:
             webview.evaluate_js("window.OWL.%s(\"%s\");"%(func,message))
-        
+        print(message)
         if fatal:
             sleep(10)
             exit()

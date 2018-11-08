@@ -21,7 +21,8 @@ class Config():
         if self.__lock and name == "crypto":
             return None
         with open(p,"rb") as f:
-            return f.read()
+            r = f.read()
+            return r
     
     def set_val(self,name,val):
         if name == "crypto":
