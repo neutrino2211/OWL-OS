@@ -209,10 +209,12 @@ class FSDirectory(FSNode):
                     for j in np[k].keys():
                         if type(np[k][j]) == dict:
                             d = FSDirectory("/"+j,crypto)
+                            d.parent = self
                             self.children.append(d)
                             self.children_map[j] = d
                         else:
                             f = FSFile("/"+j,crypto)
+                            f.parent = self
                             self.children_map[j] = f
                             self.children.append(f)
 

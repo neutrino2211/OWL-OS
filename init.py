@@ -49,7 +49,7 @@ def init():
     filesystem.root = filesystem.FSDirectory("",crypto)
     c.set_val("cpu.clock_speed",inf["clock_speed"])
     try:
-        print(filesystem.root.children)
+        print(filesystem.root.children[0].parent)
     except Exception as e:
         import traceback
         print(traceback.print_exception(*sys.exc_info()))
