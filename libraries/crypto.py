@@ -23,3 +23,8 @@ class OWLCrypto(object):
     def restore_key(self):
         with open("config/crypto","wb") as f:
             f.write(self.__key)
+
+    def export(self):
+        crypto = self
+
+crypto = None

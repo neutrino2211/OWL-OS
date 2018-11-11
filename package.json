@@ -1,0 +1,25 @@
+{
+  "name": "owl-os",
+  "version": "0.0.1-alpha",
+  "description": "Python based operating system sandbox",
+  "main": "index.js",
+  "directories": {
+    "test": "tests"
+  },
+  "scripts": {
+    "dev": "webpack -w",
+    "build": "webpack",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/neutrino2211/OWL-OS.git"
+  },
+  "author": "Tsowa Mainasara Al-amin",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/neutrino2211/OWL-OS/issues"
+  },
+  "homepage": "https://github.com/neutrino2211/OWL-OS#readme",
+  "dependencies": {}
+}

@@ -10,8 +10,10 @@ Two options are available to try and recover the system
 def main():
     try:
         init.init()
-    except Exception:
+    except Exception as e:
         init.graceful_exit()
+        import traceback
+        print(traceback.print_exception(*init.sys.exc_info()))
         print("Fatal error!!")
         v = input(prompt)
         if v=='1':

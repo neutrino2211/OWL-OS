@@ -43,25 +43,16 @@ def init():
     key = c.get_val("crypto")
     crypto = OWLCrypto(key)
     c.lock()
+    crypto.export()
     del key
     inf = owlapi.get_sys_info()
+    filesystem.root = filesystem.FSDirectory("",crypto)
     c.set_val("cpu.clock_speed",inf["clock_speed"])
     try:
-        f = filesystem.FSFile("test.txt",crypto,mode="w")
-        string = '''
-        Hello guys hopefully it encodes
-        newlines and 
-            tabs.
-        '''
-        f.write(string)
-        f.close()
-
-        f = filesystem.FSFile("test.txt",crypto)
-        print(f.read())
-        f.close()
+        print(filesystem.root.children)
     except Exception as e:
         import traceback
-        traceback.print_exception(*sys.exc_info())
+        print(traceback.print_exception(*sys.exc_info()))
     api = JSInterface()
     t = threading.Thread(target=sandbox_observer_thread)
     t.start()

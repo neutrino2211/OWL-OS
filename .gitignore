@@ -1,4 +1,5 @@
 electron
+build
 *.so
 mem_spy
 mem_spy.cc

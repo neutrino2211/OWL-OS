@@ -1,13 +1,38 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Ureno</title>
+    <link rel="stylesheet" href="./web/css/vuesax.css">
+    <link rel="stylesheet" href="./web/css/material-icons/material-icons.css">
+    <title>OWL-OS</title>
+    <style>
+        .install.img{
+            width: 300px;
+            margin-left: auto;
+            margin-right: auto;
+            padding: 10%;
+        }
+    </style>
 </head>
-<body>
-    <h1 id="title">Hello World</h1>
+<body style="background:#222 ;">
+    <div id="app">
+        <vs-row vs-justify="center" style="padding-top:5%;">
+            <vs-col type="flex" vs-justify="center" vs-align="center" vs-w="6">
+              <vs-card>
+                    <div slot="media">
+                        <img src="./web/assets/owl.png" class="install img"></img>
+                    </div>
+                <div>
+                    <vs-divider position="center"><h1>Welcome to OWL OS</h1></vs-divider>
+                    <p style="font-size: 20px;text-align:center;">Proceed to setup 
+                        <vs-icon icon="trending_flat" size="50px" style="position:absolute;margin-top:-10px;padding-left:10px;" color="rgb(11, 189, 135)"></vs-icon>
+                    </p>
+                </div>
+              </vs-card>
+            </vs-col>
+          </vs-row>          
+    </div>
 </body>
 <script>
     var frames = 0;
@@ -20,6 +45,7 @@
     }
     const OWL = {
         init(){
+            pywebview.api.toggle_fullscreen()
         }
     };
     onerror = function(e){
@@ -31,5 +57,17 @@
             OWL.init()
         } 
     },100)
+    document.onkeyup = function(e){
+        if(e.code=="Escape"){
+            window.location.reload()
+        }
+    }
+</script>
+<script src="./web/js/vue.js"></script>
+<script src="./web/js/vuesax.js"></script>
+<script>
+    new Vue({
+        el: "#app"
+    })
 </script>
 </html>
