@@ -1,3 +1,9 @@
+#@owldoc
+
+'''@
+This file contains the Config class which helps set and retrieve install and runtime configurations
+@'''
+
 from .errors import OWLObjectInstanceException
 from os import path
 

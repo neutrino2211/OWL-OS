@@ -1,25 +1,10 @@
+#@owldoc
+
+'''@
+This is the gecko mini code interpreter
+@'''
+
 import sys
-def CSV(syntax):
-    syntax = syntax.strip()
-    # print(syntax)
-    csv = []
-    ret = []
-
-    counter = 1
-
-    while counter < len(syntax):
-        if syntax[counter].startswith("'"):
-            sp = syntax.split("'")
-            csv.append(sp)
-        counter += 1
-    # print(csv)
-    if len(csv) > 0:
-        for i in csv[1]:
-            if i is not "":
-                ret.append(i)
-
-    # print(ret)
-    return ret
 
 class VirtualFile():
     def __init__(self,code):
@@ -157,7 +142,6 @@ class Interpreter():
             if val != 0:
                 return False
         return True
-# print(CSV("hello 'world dudes'"))
 
 def start(i,arg):
     i.maxm = int(arg[0])

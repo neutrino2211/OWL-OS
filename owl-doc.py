@@ -8,7 +8,7 @@ def listdir(directory):
     l = os.listdir(directory)
     for n in l:
         if os.path.isfile(directory+"/"+n) and should_document(directory+"/"+n):
-            a.append(n)
+            a.append(directory+"/"+n)
         elif os.path.isdir(directory+"/"+n):
             a.extend(listdir(directory+"/"+n))
     return a

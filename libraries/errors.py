@@ -1,3 +1,8 @@
+#@owldoc
+
+'''@
+This file contains Exception definitions that are used all over the system
+@'''
 from time import sleep
 from sys import exit
 

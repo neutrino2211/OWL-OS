@@ -1,3 +1,8 @@
+#@owldoc
+
+'''@
+This script is used the build the c++ api
+@'''
 from distutils.core import setup, Extension
 
 ext = Extension("owlapi",sources=['owlapi.cc'])

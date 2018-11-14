@@ -1,3 +1,7 @@
+#@owldoc
+'''@
+This file contains the operating system main ui thread
+@'''
 import threading
 import webview
 import signal

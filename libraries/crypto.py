@@ -1,3 +1,7 @@
+#@owldoc
+'''@
+This file contains the implementation of owl's basic crypto system
+@'''
 import onetimepad
 from os import path
 

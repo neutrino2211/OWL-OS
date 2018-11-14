@@ -1,3 +1,7 @@
+#@owldoc
+'''@
+This file contains the important Filesystem classes that store,encrypt,decrypt and link all nodes in the storage folder
+@'''
 from os import path
 import gzip
 import json
