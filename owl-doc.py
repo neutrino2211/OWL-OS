@@ -25,17 +25,21 @@ def document(p):
     for match in matches:
         content = match[4:-4]
         if content.strip().startswith(":variable") :
-            variables.append(content.strip()[9:])
+            variables.append(content.strip()[9:].strip())
         elif content.strip().startswith(":function") :
-            functions.append(content.strip()[9:])
+            functions.append(content.strip()[9:].strip())
         elif content.strip().startswith(":class"):
-            classes.append(content.strip()[6:])
+            classes.append(content.strip()[6:].strip())
         else:
             others.append(content.strip())
 
-    doc_string += "# Variables\n" + '\n\n'.join(variables)+"\n\n"
-    doc_string += "# Functions\n" + '\n\n'.join(functions)+"\n\n"
-    doc_string += "# Classes\n" + "\n\n".join(classes)+"\n\n"
+    v_str = '\n\n'.join(variables).replace("\t","")
+    f_str = '\n\n'.join(functions).replace("\t","")
+    c_str = '\n\n'.join(classes).replace("\t","")
+    # print(f_str)
+    doc_string += "# Variables\n" + v_str +"\n\n"
+    doc_string += "# Functions\n" + f_str +"\n\n"
+    doc_string += "# Classes\n" + c_str +"\n\n"
     doc_string += "\n\n--------------------------------------\n\n" + '\n\n'.join(others)
     
     return doc_string
