@@ -389,26 +389,92 @@ def je(i,arg):
 def loop(code,wv):
     i = Interpreter("",routine_name="OWL-PROCESS",wv=wv)
     i.code = VirtualFile(code)
-    i.loadFunction("allocate",allocate) '''@__allocate__ -> `allocate ..args`@'''
-    i.loadFunction("section",section) '''@__section__ -> `section ..args`@'''
-    i.loadFunction("println",_println) '''@___println__ -> `println`@'''
-    i.loadFunction("callx",extern) '''@__extern__ -> `callx ..args`@'''
-    i.loadFunction("clearm",clearm) '''@__clearm__ -> `clearm ..args`@'''
-    i.loadFunction("start",start) '''@__start__ -> `start ..args`@'''
-    i.loadFunction("print",_print) '''@__print__ -> `_print`@'''
-    i.loadFunction("push",push) '''@__push__ -> `push ..args`@'''
-    i.loadFunction("call",call) '''@__call__ -> `call ..args`@'''
-    i.loadFunction("put",put) '''@__put__ -> `put ..args`@'''
-    i.loadFunction("add",add) '''@__add__ -> `add ..args`@'''
-    i.loadFunction("sub",sub) '''@__sub__ -> `sub ..args`@'''
-    i.loadFunction("dec",dec) '''@__dec__ -> `dec ..args`@'''
-    i.loadFunction("mov",mov) '''@__mov__ -> `mov ..args`@'''
-    i.loadFunction("inc",inc) '''@__inc__ -> `inc ..args`@'''
-    i.loadFunction("end",end) '''@__end__ -> `end ..args`@'''
-    i.loadFunction("set",Set) '''@__Set__ -> `set ..args`@'''
-    i.loadFunction("jne",jne) '''@__jne__ -> `jne ..args`@'''
-    i.loadFunction("ret",ret) '''@__ret__ -> `ret ..args`@'''
-    i.loadFunction("cmp",_cmp) '''@___cmp__ -> `cmp`@'''
-    i.loadFunction("je",je) '''@__je__ -> `je`@'''
-    i.loadFunction("db",db) '''@__db__ -> `db`@'''
+    i.loadFunction("allocate",allocate) 
+    '''@
+    __allocate__ -> `allocate ..args`
+    @'''
+    i.loadFunction("section",section) 
+    '''@
+    __section__ -> `section ..args`
+    @'''
+    i.loadFunction("println",_println) 
+    '''@
+    ___println__ -> `println`
+    @'''
+    i.loadFunction("callx",extern) 
+    '''@
+    __extern__ -> `callx ..args`
+    @'''
+    i.loadFunction("clearm",clearm) 
+    '''@
+    __clearm__ -> `clearm ..args`
+    @'''
+    i.loadFunction("start",start) 
+    '''@
+    __start__ -> `start ..args`
+    @'''
+    i.loadFunction("print",_print) 
+    '''@
+    __print__ -> `_print`
+    @'''
+    i.loadFunction("push",push) 
+    '''@
+    __push__ -> `push ..args`
+    @'''
+    i.loadFunction("call",call) 
+    '''@
+    __call__ -> `call ..args`
+    @'''
+    i.loadFunction("put",put) 
+    '''@
+    __put__ -> `put ..args`
+    @'''
+    i.loadFunction("add",add) 
+    '''@
+    __add__ -> `add ..args`
+    @'''
+    i.loadFunction("sub",sub) 
+    '''@
+    __sub__ -> `sub ..args`
+    @'''
+    i.loadFunction("dec",dec) 
+    '''@
+    __dec__ -> `dec ..args`
+    @'''
+    i.loadFunction("mov",mov) 
+    '''@
+    __mov__ -> `mov ..args`
+    @'''
+    i.loadFunction("inc",inc) 
+    '''@
+    __inc__ -> `inc ..args`
+    @'''
+    i.loadFunction("end",end) 
+    '''@
+    __end__ -> `end ..args`
+    @'''
+    i.loadFunction("set",Set) 
+    '''@
+    __Set__ -> `set ..args`
+    @'''
+    i.loadFunction("jne",jne) 
+    '''@
+    __jne__ -> `jne ..args`
+    @'''
+    i.loadFunction("ret",ret) 
+    '''@
+    __ret__ -> `ret ..args`
+    @'''
+    i.loadFunction("cmp",_cmp) 
+    '''@
+    ___cmp__ -> `cmp`
+    @'''
+    i.loadFunction("je",je) 
+    '''@
+    __je__ -> `je`
+    @'''
+    i.loadFunction("db",db) 
+    '''@
+    __db__ -> `db`
+    @'''
     i.loop()
