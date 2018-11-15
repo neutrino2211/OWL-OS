@@ -33,16 +33,12 @@ def document(p):
         else:
             others.append(content.strip())
 
-    v_str = '\n\n'.join(variables).replace("\t","")
-    f_str = '\n\n'.join(functions).replace("\t","")
-    c_str = '\n\n'.join(classes).replace("\t","")
-    # print(f_str)
-    doc_string += "# Variables\n" + v_str +"\n\n"
-    doc_string += "# Functions\n" + f_str +"\n\n"
-    doc_string += "# Classes\n" + c_str +"\n\n"
-    doc_string += "\n\n--------------------------------------\n\n" + '\n\n'.join(others)
-    
-    return doc_string
+    doc_string += "# "+f+"\n"+('\n'.join(others))
+    doc_string += "\n-----------------------------\n"
+    doc_string += "# Variables\n"+('\n'.join(variables))
+    doc_string += "\n# Functions\n"+('\n'.join(functions))
+    doc_string += "\n# Classes\n"+('\n'.join(classes))
+    return doc_string.replace("\t","").replace("    ","")
 for f in listdir("."):
     _dname = os.path.dirname(f)
     dname = "." if _dname == "" else _dname

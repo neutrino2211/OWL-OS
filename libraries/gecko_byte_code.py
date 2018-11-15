@@ -5,15 +5,78 @@ This is the gecko mini code interpreter
 @'''
 
 import sys
-
-class VirtualFile():
+'''@
+:class ## VirtualFile
+This is an interface for the interpreter to treat lines of instructions as a file
+@'''
+class VirtualFile:
+    '''@
+    :function 
+    ## VirtualFile.__init__
+    store the instructions to convert
+    @'''
+    '''@
+    :variable `VirtualFile.code` instructions to convert
+    @'''
     def __init__(self,code):
         self.code = code
+    '''@
+    :function 
+    ## VirtualFile.read
+    Return the instructions
+    @'''
     def read(self):
-        return "\n".join(self.code)
+        return self.code
+    '''@
+    :function 
+    ## VirtualFile.readlines
+    Return the instructions as a list of line-by-line instructions
+    @'''
     def readlines(self):
         return self.code.split("\n")
-class Interpreter():
+'''@
+:class ## Interpreter
+Executes the mini code
+@'''
+class Interpreter:
+    '''@
+    :function ## Interpreter.__init__
+    create the spaces for functions,instruction line, webview
+    @'''
+    '''@
+    :variable 
+    `Interpreter.code`: File-like object containing the source code
+
+    `Interpreter.wv`: The pywebview instance
+
+    `Interpreter.name`: Routine name for logging purposes
+
+    `Interpreter.maxm`: Number of 'registers' used to contain temporary values
+
+    `Interpreter.line`: Used to when logging errors
+
+    `Interpreter.memory`: Python list serving as an array of 'registers' to store values
+
+    `Interpreter.flags`: Python dict to store runtime flags like errors,cmp results e.t.c
+
+    `Interpreter.variables`: Values declared by `db`
+
+    `Interpreter.functions`: dict of name to operation
+
+    `Interpreter.subroutine`: `bool` that signifies the state of the interpreter. 
+    Used to know when to skip subroutines and define them instead of running them
+
+    `Interpreter.subroutines`: `dict` of name to subroutine code
+
+    `Interpreter.memory_spaces`: `dict` of name to list used for when data is too large for the 'registers'
+
+    `Interpreter.return_pointer`: Used by `jne` `je` `cmp` and more to change the
+    instruction pointer after an operation is complete
+
+    `Interpreter.subroutinecode`: Used to store subroutine instructions when __Interpreter.subroutine__ is False
+
+    `Interpreter.instrunction_pointer`: Used to know which instruction is to be executed next
+    @'''
     def __init__(self,file,routine_name="",start_line=0,wv=None):
         if file != "":
             self.code = open(file)
@@ -41,6 +104,10 @@ class Interpreter():
         self.return_pointer = 0
         self.subroutinecode = []
         self.instruction_pointer = 0
+    '''@
+    :function `Interpreter.loop`
+    Go through every instruction and execute it
+    @'''
     def loop(self):
         lines = self.code.readlines()
         ln = len(lines)
@@ -56,6 +123,10 @@ class Interpreter():
             # print(line,end="")
         # print()
 
+    '''@
+    :function `Interpreter.breakStatement`
+    Convert a line of code into `operation` `..args`
+    @'''
     def breakStatement(self,statement):
         # print(statement)
         r = []
@@ -75,6 +146,11 @@ class Interpreter():
                 t += c
         r.append(t)
         return r
+
+    '''@
+    :function `Interpreter.execute`
+    Run function assigned to the opcode with the arguments
+    @'''
     def execute(self,arr):
         # print(arr)
         if arr[0] != "" :
@@ -94,9 +170,18 @@ class Interpreter():
                 sys.exit()
 
 
+    '''@
+    :function `Interpreter.loadFunction`
+    Assign a python function to an opcode
+    @'''
     def loadFunction(self,name,f):
         self.functions[name] = f
         # pass
+
+    '''@
+    :function `Interpreter.convertInt`
+    Convert string representaion of number to int
+    @'''
     def convertInt(self,i):
         r = 0
         try:
@@ -105,6 +190,10 @@ class Interpreter():
             r = int(1,16)
         return r
 
+    '''@
+    :function `Interpreter.resolveValue`
+    resolve various representations of values
+    @'''
     def resolveValue(self,a):
         try:
             try:
@@ -134,6 +223,10 @@ class Interpreter():
             # print("IN={0}, ARR={1}, RES1={2}, RES={3}".format(index,arr,self.resolveValue(arr),self.resolveValue(index)))
             return self.resolveValue(arr)[self.resolveValue(index)]
 
+    '''@
+    :function `Interpreter.isDefinedSpace`
+    Check if array is supposed to have a size limit
+    @'''
     def isDefinedSpace(self,v):
         # print(v)
         if len(v) == 0:
@@ -142,6 +235,10 @@ class Interpreter():
             if val != 0:
                 return False
         return True
+
+'''@
+## Supported operations
+@'''
 
 def start(i,arg):
     i.maxm = int(arg[0])
@@ -292,26 +389,26 @@ def je(i,arg):
 def loop(code,wv):
     i = Interpreter("",routine_name="OWL-PROCESS",wv=wv)
     i.code = VirtualFile(code)
-    i.loadFunction("allocate",allocate)
-    i.loadFunction("section",section)
-    i.loadFunction("println",_println)
-    i.loadFunction("callx",extern)
-    i.loadFunction("clearm",clearm)
-    i.loadFunction("start",start)
-    i.loadFunction("print",_print)
-    i.loadFunction("push",push)
-    i.loadFunction("call",call)
-    i.loadFunction("put",put)
-    i.loadFunction("add",add)
-    i.loadFunction("sub",sub)
-    i.loadFunction("dec",dec)
-    i.loadFunction("mov",mov)
-    i.loadFunction("inc",inc)
-    i.loadFunction("end",end)
-    i.loadFunction("set",Set)
-    i.loadFunction("jne",jne)
-    i.loadFunction("ret",ret)
-    i.loadFunction("cmp",_cmp)
-    i.loadFunction("je",je)
-    i.loadFunction("db",db)
+    i.loadFunction("allocate",allocate) '''@__allocate__ -> `allocate ..args`@'''
+    i.loadFunction("section",section) '''@__section__ -> `section ..args`@'''
+    i.loadFunction("println",_println) '''@___println__ -> `println`@'''
+    i.loadFunction("callx",extern) '''@__extern__ -> `callx ..args`@'''
+    i.loadFunction("clearm",clearm) '''@__clearm__ -> `clearm ..args`@'''
+    i.loadFunction("start",start) '''@__start__ -> `start ..args`@'''
+    i.loadFunction("print",_print) '''@__print__ -> `_print`@'''
+    i.loadFunction("push",push) '''@__push__ -> `push ..args`@'''
+    i.loadFunction("call",call) '''@__call__ -> `call ..args`@'''
+    i.loadFunction("put",put) '''@__put__ -> `put ..args`@'''
+    i.loadFunction("add",add) '''@__add__ -> `add ..args`@'''
+    i.loadFunction("sub",sub) '''@__sub__ -> `sub ..args`@'''
+    i.loadFunction("dec",dec) '''@__dec__ -> `dec ..args`@'''
+    i.loadFunction("mov",mov) '''@__mov__ -> `mov ..args`@'''
+    i.loadFunction("inc",inc) '''@__inc__ -> `inc ..args`@'''
+    i.loadFunction("end",end) '''@__end__ -> `end ..args`@'''
+    i.loadFunction("set",Set) '''@__Set__ -> `set ..args`@'''
+    i.loadFunction("jne",jne) '''@__jne__ -> `jne ..args`@'''
+    i.loadFunction("ret",ret) '''@__ret__ -> `ret ..args`@'''
+    i.loadFunction("cmp",_cmp) '''@___cmp__ -> `cmp`@'''
+    i.loadFunction("je",je) '''@__je__ -> `je`@'''
+    i.loadFunction("db",db) '''@__db__ -> `db`@'''
     i.loop()
