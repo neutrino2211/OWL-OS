@@ -45,6 +45,11 @@
     }
     const OWL = {
         init(){
+            pywebview.api.gecko(`
+            mov %M1 'Hello'
+            mov %M2 'World'
+            callx alert_multiple
+            `)
             pywebview.api.toggle_fullscreen()
         }
     };

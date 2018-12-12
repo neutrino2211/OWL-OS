@@ -29,3 +29,5 @@ Entry point for install procedure
 Wrapper for all operations to be performed when installing the system
 ## CryptoTask(InstallTask)
 Task to setup crypto values e.g key
+## FSTask(InstallTask)
+Task to setup filesystem

@@ -128,6 +128,20 @@ class CryptoTask(InstallTask):
         self.log("key saved")
 
 '''@
+:class
+## FSTask(InstallTask)
+Task to setup filesystem
+@'''
+
+class FSTask(InstallTask):
+    def run(self,args):
+        self.log("Initializing, filesystem")
+        self.confirm_path("./storage/storagemap.json")
+        with open("./storage/storagemap.json","w") as f:
+            f.write("{}")
+        self.log("Done")
+
+'''@
 :function
 ## run_tasks
 Run tasks given as arguments
@@ -144,7 +158,8 @@ Entry point for install procedure
 @'''
 def main(args):
     run_tasks([
-        CryptoTask("crypto",args)
+        CryptoTask("crypto",args),
+        FSTask("FS",args)
     ])
 
 if __name__ == "__main__":

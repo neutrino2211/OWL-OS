@@ -12,7 +12,11 @@ from libraries import filesystem
 from libraries.crypto import OWLCrypto
 from libraries import gecko_byte_code
 
-import owlapi
+if filesystem.path.os.name != "nt":
+    import owlapi
+else:
+    # TODO make windows specific native modules
+    pass
 
 shutdown = False
 crypto = None
@@ -49,9 +53,11 @@ def init():
     c.lock()
     crypto.export()
     del key
-    inf = owlapi.get_sys_info()
+    # inf = owlapi.get_sys_info()
+    hello_file = filesystem.FSFile("/README.txt",crypto)
+    print(hello_file.read())
     filesystem.root = filesystem.FSDirectory("",crypto)
-    c.set_val("cpu.clock_speed",inf["clock_speed"])
+    # c.set_val("cpu.clock_speed",inf["clock_speed"])
     try:
         print(filesystem.root.children[0].parent)
     except Exception as e:
