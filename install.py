@@ -5,7 +5,7 @@ This file is used to setup crucial aspects of the virtual operating system
 e.g Crypto
 @'''
 import random
-from os import path, makedirs
+from os import path, makedirs, walk, remove
 from sys import argv
 
 '''@
@@ -136,9 +136,42 @@ Task to setup filesystem
 class FSTask(InstallTask):
     def run(self,args):
         self.log("Initializing, filesystem")
+        mypath = "./storage"
+        for root, dirs, files in walk(mypath):
+            for file in files:
+                if file != "storagemap.json":
+                    remove(path.join(root, file))
         self.confirm_path("./storage/storagemap.json")
         with open("./storage/storagemap.json","w") as f:
             f.write("{}")
+        # Imports
+        from libraries.bundle import FQL, unbundle
+        from libraries import filesystem
+        from libraries import Config
+        from libraries.crypto import OWLCrypto
+        filesystem.make_dirs("/Applications")
+        config = Config()
+        crypto = OWLCrypto(config.get_val("crypto"))
+        config.lock()
+        
+        self.log("Installing apps")
+        apps = FQL.unpack("./install/apps.fz")
+        for app in apps:
+            app_bundle = FQL.frombits(FQL.FUnassign(FQL.FUnassign2(app.split("?")[0])))
+            app_id, app_name, main_entry,assets = unbundle.main([unbundle.byteify(app_bundle)])
+            self.log("Installing [{}]".format(app_id))
+            filesystem.make_dirs("/Applications/"+app_id)
+            filesystem.make_dirs("/Applications/"+app_id+"/assets")
+            app_index = filesystem.FSFile("/Applications/"+app_id+"/index.html",crypto,mode="w")
+            app_index.write(str(main_entry)[2:-1])
+            app_index.close()
+            for k in assets:
+                key = k[1:]
+                asset_path = "/".join(k.split("\\"))
+                self.log("Adding [{0}{1}]".format(app_id,asset_path))
+                asset_file = filesystem.FSFile("/Applications/"+app_id+"/assets"+asset_path,crypto,mode="w")
+                asset_file.write(assets[k])
+                asset_file.close()
         self.log("Done")
 
 '''@

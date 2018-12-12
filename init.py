@@ -54,9 +54,9 @@ def init():
     crypto.export()
     del key
     # inf = owlapi.get_sys_info()
-    hello_file = filesystem.FSFile("/README.txt",crypto)
-    print(hello_file.read())
-    filesystem.root = filesystem.FSDirectory("",crypto)
+    # hello_file = filesystem.FSFile("/README.txt",crypto)
+    # print(hello_file.read())
+    # filesystem.root = filesystem.FSDirectory("",crypto)
     # c.set_val("cpu.clock_speed",inf["clock_speed"])
     try:
         print(filesystem.root.children[0].parent)

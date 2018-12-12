@@ -1,6 +1,6 @@
 #@owldoc
 import zlib
-import FQL
+from .FQL import FUnassign, FUnassign2
 import sys
 
 '''@
@@ -32,7 +32,7 @@ def unpackAssets(assets):
     assets = a.split("*")
     for asset in assets:
         cva = asset.split("?")
-        assets_dict[cva[1]] = frombits(FQL.FUnassign(FQL.FUnassign2(cva[0])))
+        assets_dict[cva[1]] = frombits(FUnassign(FUnassign2(cva[0])))
     return assets_dict
 
 
@@ -48,15 +48,14 @@ def main(args):
 
     # HEADER
     bundle_header = bundle_parts[0]
-    bundle_header_content = frombits(FQL.FUnassign(FQL.FUnassign2(bundle_header.split("?")[0])))
+    bundle_header_content = frombits(FUnassign(FUnassign2(bundle_header.split("?")[0])))
 
     # Assets
     bundle_assets = bundle_parts[1]
-    bundle_assets_content = frombits(FQL.FUnassign(FQL.FUnassign2(bundle_assets.split("?")[0])))
+    bundle_assets_content = frombits(FUnassign(FUnassign2(bundle_assets.split("?")[0])))
     assets = unpackAssets(zlib.decompress(byteify(bundle_assets_content)))
     # print(assets)
     if bundle_header_content[:4] == "xOWL":
-        print("Valid application")
         app_entry = zlib.decompress(byteify(bundle_header_content[0xf4:]))
         app_header = bundle_header_content[:0xf4]
         app_name,app_package = (app_header[124:].replace("\x00",""),app_header[4:124].replace("\x00",""))

@@ -35,6 +35,7 @@
     </div>
 </body>
 <script>
+    alert("JS")
     var frames = 0;
     var img = document.getElementById("img");
     var fps = document.getElementById("fps");
@@ -45,12 +46,14 @@
     }
     const OWL = {
         init(){
+            alert("Hey")
             pywebview.api.gecko(`
             mov %M1 'Hello'
             mov %M2 'World'
-            callx alert_multiple
+            put %M1 0x0
+            println
             `)
-            pywebview.api.toggle_fullscreen()
+            // pywebview.api.toggle_fullscreen()
         }
     };
     onerror = function(e){

@@ -200,35 +200,41 @@ def frombits(bits):
         byte = bits[b*8:(b+1)*8]
         chars.append(chr(int(''.join([str(bit) for bit in byte]), 2)))
     return ''.join(chars)
+
+
+def pack(f):
+    arg = f
+    if not os.path.isdir(os.path.join(os.path.curdir,arg)):
+        sys.stderr.write("Error : {} is not a directory.\n".format(arg))
+        sys.exit()
+    fz = FlameZipArchive()
+    
+    s = fz.archiveDir(os.path.join(os.getcwd(),arg))
+    a = "*".join(s)
+
+    comp = zlib.compress(byteify(a))
+    return comp
+
+def unpack(f):
+    rftext = ""
+    fz = open(f,"rb")
+    rftext = fz.read()
+    dec = str(zlib.decompress(rftext))[2:-1]
+
+    l = dec.split("*")
+    return l
 if __name__ == "__main__":
     if len(sys.argv) < 2:
         print("Usage FQL <pack|unpack> <source>")
         sys.exit()
     if sys.argv[1] == "pack":
-        arg = sys.argv[2]
-        if not os.path.isdir(os.path.join(os.path.curdir,arg)):
-            sys.stderr.write("Error : {} is not a directory.\n".format(arg))
-            sys.exit()
-        fz = FlameZipArchive()
-        
-        s = fz.archiveDir(os.path.join(os.getcwd(),arg))
-        a = "*".join(s)
-
-        comp = zlib.compress(byteify(a))
-
+        comp = pack(sys.argv[2])
         print("Writing {}".format(arg+".fz"))
         dest = open(arg+".fz","wb")
         dest.write(comp)
         dest.close()
     elif sys.argv[1] == "unpack":
-        rftext = ""
-        fz = open(sys.argv[2],"rb")
-        print("Getting file bytes")
-        rftext = fz.read()
-        dec = str(zlib.decompress(rftext))[2:-1]
-
-        l = dec.split("*")
-
+        l = unpack(sys.argv[2])
         for d in l:
             df = d.split("?")
             dt = df[0]
@@ -243,7 +249,6 @@ if __name__ == "__main__":
             fb = frombits(fu)
             ff.write(byteify(fb))
             ff.close()
-
     else:
         print("Usage FQL <pack|unpack> <source>")
         sys.exit()
