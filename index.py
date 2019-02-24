@@ -8,7 +8,7 @@ import init
 prompt = '''
 A catastrophic error occured and your computer is having a hard time booting.
 This might be caused by a device malfunction or the startup disk is corrupted.
-Two options are available to try and recover the system
+There are options available to try and recover the system
     1: Restart
     2: Re-install (will wipe data)
     3: shutdown

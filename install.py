@@ -172,6 +172,8 @@ class FSTask(InstallTask):
                 asset_file = filesystem.FSFile("/Applications/"+app_id+"/assets"+asset_path,crypto,mode="w")
                 asset_file.write(assets[k])
                 asset_file.close()
+        self.log("Restoring crypt key..")
+        crypto.restore_key()
         self.log("Done")
 
 '''@

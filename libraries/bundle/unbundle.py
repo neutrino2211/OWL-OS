@@ -25,7 +25,7 @@ def frombits(bits):
 Get all assets in an app and return them in dict form
 @'''
 def unpackAssets(assets):
-    a = str(assets)[2:-1]
+    a = assets.decode("ISO-8859-5")
     assets_dict = {}
     # print(a)
     a = a.replace("\\\\","\\")
@@ -43,15 +43,15 @@ Return vital application info in the tuple (bundle_name,app_name,main_entry_code
 def main(args):
 
     bundle = zlib.decompress(args[0])
-    bundle = str(bundle)[2:-1]
+    bundle = bundle.decode("ISO-8859-5")
     bundle_parts = bundle.split("*")
 
     # HEADER
-    bundle_header = bundle_parts[0]
+    bundle_header = bundle_parts[1]
     bundle_header_content = frombits(FUnassign(FUnassign2(bundle_header.split("?")[0])))
 
     # Assets
-    bundle_assets = bundle_parts[1]
+    bundle_assets = bundle_parts[0]
     bundle_assets_content = frombits(FUnassign(FUnassign2(bundle_assets.split("?")[0])))
     assets = unpackAssets(zlib.decompress(byteify(bundle_assets_content)))
     # print(assets)

@@ -77,6 +77,7 @@ class FSNode:
     `FSNode:`
         Base class for all filesystem content
     '''
+    parent = None
     path = ""
     is_directory: bool = False
     m : dict = json.loads(open("./storage/storagemap.json").read())
@@ -123,6 +124,7 @@ class FSFile(FSNode):
         self.line = 0
         self.mode = mode
         self.lines = []
+        self.name = p.split("/")[-1]
         self.is_write = self.mode.find("r")==-1
         np = self.get_node_path()
         ex = dir_exists(self.path)
@@ -148,7 +150,7 @@ class FSFile(FSNode):
 
     def read(self,size=None) -> str:
         size = size or len(self.content)
-        return self.crypto.decrypt(self.content[:size])
+        return self.crypto.decrypt(self.content[:size]).replace("\\r","\r").replace("\\n","\n")
 
     def readline(self) -> str:
         if self.is_write :
@@ -157,7 +159,7 @@ class FSFile(FSNode):
             self.eof = True
         elif len(self.lines) <= self.line:
             raise IndexError()
-        l = self.crypto.decrypt(self.lines[self.line])
+        l = self.crypto.decrypt(self.lines[self.line]).replace("\\r","\r").replace("\\n","\n")
         self.line += 1
         return l
 
@@ -166,7 +168,7 @@ class FSFile(FSNode):
             raise OWLFileModeError(self.mode,"readlines")
         l = []
         for line in self.lines:
-            l.append(self.crypto.decrypt(line))
+            l.append(self.crypto.decrypt(line).replace("\\r","\r").replace("\\n","\n"))
         return l
 
     def write(self,content):
@@ -188,38 +190,64 @@ class FSFile(FSNode):
         if self.is_write :
             self.file.write(gzip.compress(bytes(self.content,"ISO-8859-5")))
         self.file.close()
+    
+    def __str__(self):
+        return "{} [f]".format(self.path)
+
+    def __format__(self,_):
+        return "{} [f]".format(self.path)
 
 class FSDirectory(FSNode):
     children : List[FSNode] = []
     children_map : dict = {}
+
+    def __str__(self):
+        return "{} [d]".format(self.path)
+
+    def __format__(self,_):
+        return "{} [d]".format(self.path)
+
     def __init__(self,p,crypto):
         self.path = p
+        self.name = p.split("/")[-1]
         self.is_directory = True
+        self.crypto = crypto
+    
+    def create(self):
         np = self.get_node_path()
+        crypto = self.crypto
         if type(np) != dict:
             raise OWLException("{} is not a directory".format(self.path))
         for k in np.keys():
-            if k != "":
-                if type(np[k]) == dict:
-                    d = FSDirectory(k)
-                    self.children.append(d)
-                    self.children_map[k] = d
-                else:
-                    f = FSFile(k,crypto)
-                    self.children_map[k] = f
-                    self.children.append(f)
+            if k == "" and type(np[k]) == dict:
+                for j in np[k].keys():
+                    if type(np[k]) == dict:
+                        d = FSDirectory("/"+j,self.crypto)
+                        d.create()
+                        self.children.append(d)
+                        d.parent = self
+                    else:
+                        f = FSFile("/"+j,self.crypto)
+                        self.children.append(f)
+                        f.parent = self
+
+            elif type(np[k]) == dict:
+                d = FSDirectory(self.path+"/"+k,self.crypto)
+                d.create()
+                self.children.append(d)
+                d.parent = self
             else:
-                if type(np[k]) == dict:
-                    for j in np[k].keys():
-                        if type(np[k][j]) == dict:
-                            d = FSDirectory("/"+j,crypto)
-                            d.parent = self
-                            self.children.append(d)
-                            self.children_map[j] = d
-                        else:
-                            f = FSFile("/"+j,crypto)
-                            f.parent = self
-                            self.children_map[j] = f
-                            self.children.append(f)
+                f = FSFile(self.path+"/"+k,self.crypto)
+                self.children.append(f)
+                f.parent = self
+        children = []
+        children_map = {}
+        for c in self.children:
+            if c.parent.path == self.path:
+                children.append(c)
+                children_map[c.name] = c
+        self.children = children
+        self.children_map = children_map
+        return self #Method chaining
 
 root = None
