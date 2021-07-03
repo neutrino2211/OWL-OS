@@ -63,6 +63,7 @@ def sandbox_observer_thread():
             for p in paths[1:]:
                 if p in node.children_map.keys():
                     node = node.children_map[p]
+            # print(node.children[1], paths)
             message = node.read()
             self.wfile.write(message.encode('utf-8'))
             return 200
@@ -73,8 +74,6 @@ def graceful_exit():
     global sock
     if crypto:
         crypto.restore_key()
-    if webview.window_exists():
-        webview.destroy_window()
     shutdown = True
     sock.shutdown()
     sock.server_close()
@@ -103,4 +102,6 @@ def init():
     t = threading.Thread(target=sandbox_observer_thread)
     t.start()
     signal.signal(signal.SIGINT,await_sigint)
-    webview.create_window("OWL-OS", url="./index.html", js_api=api)
+    window = webview.create_window("OWL-OS", url="./index.html", js_api=api)
+    # window.toggle_fullscreen()
+    webview.start(gui='gtk', debug=True)

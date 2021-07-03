@@ -47,16 +47,26 @@ def main(args):
     bundle_parts = bundle.split("*")
 
     # HEADER
-    bundle_header = bundle_parts[1]
+    bundle_header = bundle_parts[0]
     bundle_header_content = frombits(FUnassign(FUnassign2(bundle_header.split("?")[0])))
 
     # Assets
-    bundle_assets = bundle_parts[0]
+    bundle_assets = bundle_parts[1]
     bundle_assets_content = frombits(FUnassign(FUnassign2(bundle_assets.split("?")[0])))
-    assets = unpackAssets(zlib.decompress(byteify(bundle_assets_content)))
+    try:
+        assets = unpackAssets(zlib.decompress(byteify(bundle_assets_content)))
+    except Exception as e:
+        bundle_header = bundle_parts[1]
+        bundle_header_content = frombits(FUnassign(FUnassign2(bundle_header.split("?")[0])))
+
+        # Assets
+        bundle_assets = bundle_parts[0]
+        bundle_assets_content = frombits(FUnassign(FUnassign2(bundle_assets.split("?")[0])))
+        assets = unpackAssets(zlib.decompress(byteify(bundle_assets_content)))
     # print(assets)
     if bundle_header_content[:4] == "xOWL":
         app_entry = zlib.decompress(byteify(bundle_header_content[0xf4:]))
+        app_entry = str(app_entry).replace('\\n','\n')
         app_header = bundle_header_content[:0xf4]
         app_name,app_package = (app_header[124:].replace("\x00",""),app_header[4:124].replace("\x00",""))
         # print(app_name,app_package)

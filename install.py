@@ -124,7 +124,7 @@ class CryptoTask(InstallTask):
         for i in range(r):
             s = sxor(s,''.join(chr(random.randint(0,255)) for _ in range(ks)))
         with open("./config/crypto","wb") as f:
-            f.write(bytes(s,'utf-8'))
+            f.write(bytes(s[:ks],'utf-8'))
         self.log("key saved")
 
 '''@
@@ -155,7 +155,8 @@ class FSTask(InstallTask):
         config.lock()
         
         self.log("Installing apps")
-        apps = FQL.unpack("./install/apps.fz")
+        apps_file = self.get_arg('apps-file') or "./install/apps.fz"
+        apps = FQL.unpack(apps_file)
         for app in apps:
             app_bundle = FQL.frombits(FQL.FUnassign(FQL.FUnassign2(app.split("?")[0])))
             app_id, app_name, main_entry,assets = unbundle.main([unbundle.byteify(app_bundle)])
@@ -164,6 +165,7 @@ class FSTask(InstallTask):
             filesystem.make_dirs("/Applications/"+app_id+"/assets")
             app_index = filesystem.FSFile("/Applications/"+app_id+"/index.html",crypto,mode="w")
             app_index.write(str(main_entry)[2:-1])
+            # print(main_entry)
             app_index.close()
             for k in assets:
                 key = k[1:]

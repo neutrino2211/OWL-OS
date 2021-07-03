@@ -150,7 +150,7 @@ class FSFile(FSNode):
 
     def read(self,size=None) -> str:
         size = size or len(self.content)
-        return self.crypto.decrypt(self.content[:size]).replace("\\r","\r").replace("\\n","\n")
+        return self.crypto.decrypt(self.content[:size])#.replace("\\r","\r").replace("\\n","\n")
 
     def readline(self) -> str:
         if self.is_write :
@@ -159,7 +159,7 @@ class FSFile(FSNode):
             self.eof = True
         elif len(self.lines) <= self.line:
             raise IndexError()
-        l = self.crypto.decrypt(self.lines[self.line]).replace("\\r","\r").replace("\\n","\n")
+        l = self.crypto.decrypt(self.lines[self.line])#.replace("\\r","\r").replace("\\n","\n")
         self.line += 1
         return l
 
@@ -168,7 +168,8 @@ class FSFile(FSNode):
             raise OWLFileModeError(self.mode,"readlines")
         l = []
         for line in self.lines:
-            l.append(self.crypto.decrypt(line).replace("\\r","\r").replace("\\n","\n"))
+            l.append(self.crypto.decrypt(line))
+            #.replace("\\r","\r").replace("\\n","\n"))
         return l
 
     def write(self,content):
